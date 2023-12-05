@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="UTF-8">
+    <title>APP Cadastro Produtos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="libs/materialize.min.css">
+    <link rel="stylesheet" href="libs/jquery-ui.css">
+    <link rel="stylesheet" href="design.css">
+</head>
+ 
+<body>
+    <nav style="background-color: gray;">
+        <div class="nav-wrapper right">
+            <button class="bnt" style="background-color: gray;" onclick="toggleModoNoturno()">
+                <li href="collapsible.html" class="material-icons center-align" style="color: #000 ;">brightness_2</li>
+            </button>
+            <style>
+                body {
+                    background-color: #fff;
+                    color: #000;
+                }
+ 
+                .modo-noturno {
+                    background-color: #000;
+                    color: #fff;
+                }
+            </style>
+            <script>
+                function toggleModoNoturno() {
+                    const body = document.querySelector('body');
+                    body.classList.toggle('modo-noturno');
+                }
+            </script>
+        </div>
+        <main>
+            <div class="col s12">
+                <h4>Formulário de Cadastro de Produtos</h4>
+            </div>
+    </nav>
+    <form id="frmProduto">
+        <input type="hidden" name="id" id="id" />
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="Informe o nome do produto aqui" id="nome" name="nome" type="text">
+                <label for="nome">Nome do produto</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Descrição do produto" id="descricao" name="descricao" type="text">
+                <label for="descricao">Descrição do produto</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Valor" id="valor" name="valor" type="text">
+                <label for="valor">Valor do Produto</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Quantidade" id="qtdeEstoque" name="quantidade" type="text">
+                <label for="qtdeEstoque">Quantidade</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Quantidade minima" id="estoqueMinimo" name=" quantidade minima" type="text">
+                <label for="estoqueMinimo">Quantidade Minima</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Link imagem" id="imagem" name="imagem" type="text" id="imagem"
+                    class="responsive-img" src="cool_pic.jpg">
+                <!-- <button onclick="exibirImagem()">Enviar Imagem</button> -->
+                <label for="imagem">Imagem do Produto</label>
+            </div>
+            <div id="Imagem"></div>
+        </div>
+ 
+        <script>
+            function exibirImagem() {
+                var link = document.getElementById("imagem").value;
+                var imagemContainer = document.getElementById("imagem");
+                imagemContainer.innerHTML = '<img src="' + link + '">';
+            }
+        </script>
+ 
+        <div class="container center-align">
+            <div class="col s4 m3 l2 center-align oculto" id="menuBoletim12">
+                <button class="bnt" style="border: #fff; background-color: white;">
+                    <i class="medium material-icons clique red-text text-darken-1" onclick="Gravar()">save</i><br />
+                    <label class="blue-text text-darken-3 clique" onclick="Gravar() , exibirImagem()">GRAVAR</label>
+                </button>
+            </div>
+        </div>
+    </form>
+    </main>
+    <div id="listaProdutos"></div>
+    <script src="libs/jquery-3.4.1.min.js"></script>
+    <script src="libs/jquery-ui.min.js"></script>
+    <script src="libs/materialize.min.js"></script>
+    <script src="libs/jquery.mask.js"></script>
+    <script src="libs/app.js"></script>
+ 
+    <script>
+        $(document).ready(function () {
+            $.get("http://localhost:8080/produtos", function (json, status) {
+                var html = '<div class="row">';
+                html += '<div class="col s12 l2">Nome</div>';
+                html += '<div class="col s12 l2">Descrição</div>';
+                html += '<div class="col s12 l2">Valor</div>';
+                html += '<div class="col s12 l2">Estoque</div>';
+                html += '<div class="col s12 l1">qtdMin</div>';
+                html += '<div class="col s12 l1">Imagem</div>';
+                html += '</div>';
+                for (var i = 0; i < json.length; i++) {
+                    html += '<div class="row">';
+                    html += '<div class="col s12 l2">' + json[i].nome + '</div>';
+                    html += '<div class="col s12 l2">' + json[i].descricao + '</div>';
+                    html += '<div class="col s12 l2">' + json[i].valor + '</div>';
+                    html += '<div class="col s12 l2">' + json[i].qtdeEstoque + '</div>';
+                    html += '<div class="col s12 l1">' + json[i].estoqueMinimo + '</div>';
+                    html += '<div class="col s12 l1"><img src="' + json[i].imagem + '" class="imagemMod"></div>';
+                    html += '<div class="col s6 l1">'
+                    html += '<i class="Small material-icons clique blue-text text-darken-2" onclick="editarProduto(\'' + json[i].id + '\')">edit</i>';
+                    html += '</div>';
+                    html += '<div class="col s6 l1">'
+                    html += '<i class="Small material-icons clique red-text text-darken-3" onclick="excluirProduto(\'' + json[i].id + '\')">delete_forever</i>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                console.log(html);
+                $("#listaProdutos").html(html);
+ 
+            });
+            //var url ="http://localhost:8080/produtos";
+            //var dados = {};
+            //var funcao = function (json) {
+            //    console.log(json);
+            //exibirMensagem(json.id);
+            //}
+            //buscarDados(url, "GET", dados, funcao);
+        });
+ 
+        function editarProduto(idProduto) {
+            var url = "http://localhost:8080/produtos/" + idProduto
+            $.get(url, function (json, status) {
+                $("#id").val(json.id);
+                $("#nome").val(json.nome);
+                $("#descricao").val(json.descricao);
+                $("#valor").val(json.valor);
+                $("#qtdeEstoque").val(json.qtdeEstoque);
+                $("#estoqueMinimo").val(json.estoqueMinimo);
+                $("#imagem").val(json.imagem);
+            });
+        }
+ 
+        function excluirProduto(idProduto) {
+            exibirMensagem("ID PROD EXCLUIR: " + idProduto);
+        }
+ 
+        // function testeEnvio() {
+        //     var url = "http://localhost:8080/produtos";
+        //     var dados = `{"nome":"Notebook",
+        //                   "descricao":"Novo de fabrica",
+        //                   "valor": 5000.00,
+        //                   "qtdeEstoque":5,
+        //                   "estoqueMinimo":2,
+        //                   "imagem":"SEM IMAGEM" }`;
+        //     var funcao = function (json) {
+        //         console.log(json);
+        //         exibirMensagem(json.id);
+        //     }
+        //     buscarDados(url, dados, funcao);
+        //     //buscarDadosNoParseJSON(url, dados, funcao);
+        // }
+ 
+        function Gravar() {
+            var nome = $("#nome").val();
+            var descricao = $("#descricao").val();
+            var valor = $("#valor").val();
+            var qtdeEstoque = $("#qtdeEstoque").val();
+            var estoqueMinimo = $("#estoqueMinimo").val();
+            var imagem = $("#imagem").val();
+ 
+            var dados =
+            {
+                "nome": nome,
+                "descricao": descricao,
+                "valor": parseFloat(valor),
+                "qtdeEstoque": parseInt(qtdeEstoque),
+                "estoqueMinimo": parseInt(estoqueMinimo),
+                "imagem": String(imagem)
+            };
+ 
+            var funcao = function (json) {
+                console.log(json);
+                exibirMensagem(json.id);
+            }
+ 
+            $.ajax({
+                url: "http://localhost:8080/produtos",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(dados),
+                success: function (json) {
+                    console.log(json);
+                    exibirMensagem(json.id);
+                    carregarListaProdutos();
+                    limparCampos();
+                },
+                error: function (error) {
+                    console.error(error);
+                    exibirMensagem("Não foi possivel cadastrar o produto.");
+                }
+            }); //enviar os dados para cadastrar os produtos digitado
+        }
+    </script>
+ 
+    <div id="dialog" title="ATENÇÃO!" style="display: none">
+        <p class="center-align"><i class="material-icons medium amber-text">info</i><br /><span
+                class="indigo-text center-align" id="msgResp"></span></p>
+    </div>
+ 
+    <div id="dialogAguarde" class="modal oculto" title="AGUARDE...">
+        <div class="modal-content">
+            <div class='preloader-wrapper small active'>
+                <div class='spinner-layer spinner-blue-only'>
+                    <div class='circle-clipper left'>
+                        <div class='circle'></div>
+                    </div>
+                    <div class='gap-patch'>
+                        <div class='circle'></div>
+                    </div>
+                    <div class='circle-clipper right'>
+                        <div class='circle'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+ 
+</html>
