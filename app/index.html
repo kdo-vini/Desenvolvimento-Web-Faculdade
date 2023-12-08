@@ -1,130 +1,183 @@
-<!DOCTYPE html >
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>APP Cadastro Produtos</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="libs/materialize.min.css">
-        <link rel="stylesheet" href="libs/jquery-ui.css">
-    </head>
-      <body>
-        <main>
-            <div class="col s12 text-center">
-            <h4>Formulário de Cadastro de Produtos</h4>
-            </div>
-            <form id="frmProduto">
-                <input type="hidden" name="id" id="id"/>
-                <div class="row">
-                    <div class="input-field col s4">                       
-                        <input placeholder="Informe o nome do produto aqui" id="nome" name="nome" type="text">
-                        <label for="nome">Nome do produto</label>
-                    </div>
-                    <div class="input-field col s4">
-                        <input placeholder="Descrição do produto" id="descricao" name="descricao" type="text">
-                        <label for="descricao">Descrição do produto</label>
-                    </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>APP Cadastro Produtos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Ubuntu', monospace;
+        }
 
+        h4 {
+            font-family: 'Ubuntu', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container header">
+        <div class="row">
+            <h4 class="titulo-formulario">Formulário de Cadastro de Produtos</h4>
+        </div>
+        </div>
+        <form class="col s12" id="frmProduto">
+            <input type="hidden" name="id" id="id"/>
+            <div class="row">
+                <div class="input-field col s4">                       
+                    <input placeholder="Informe o nome do produto aqui" id="nome" name="nome" type="text">
+                    <label for="nome">Nome do produto</label>
                 </div>
-                <div class="row">
-                    <div class="input-field col s4">
-                        <input placeholder="Insira o estoque mínimo do produto" id="estoqueMinimo" name="estoqueMinimo" type="text">
-                        <label for="estoqueMinimo">Estoque mínimo do produto</label>
-                    </div>
-                    <div class="input-field col s4">
-                        <input placeholder="Informe o valor do produto" id="valor" name="valor" type="text">
-                        <label for="valor">Valor do produto</label>
-                    </div>
-                    <div class="input-field col s4">
-                        <input placeholder="Informe a quantidade do produto em estoque" id="qtdeEstoque" name="qtdeEstoque" type="text">
-                        <label for="qtdeEstoque">estoque do produto</label>
-                    </div>
+                <div class="input-field col s4">
+                    <input placeholder="Descrição do produto" id="descricao" name="descricao" type="text">
+                    <label for="descricao">Descrição do produto</label>
                 </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s4">
+                    <input placeholder="Insira o estoque mínimo do produto" id="estoqueMinimo" name="estoqueMinimo" type="text">
+                    <label for="estoqueMinimo">Estoque mínimo do produto</label>
+                </div>
+                <div class="input-field col s4">
+                    <input placeholder="Informe o valor do produto" id="valor" name="valor" type="text">
+                    <label for="valor">Valor do produto</label>
+                </div>
+                <div class="input-field col s4">
+                    <input placeholder="Informe a quantidade do produto em estoque" id="qtdeEstoque" name="qtdeEstoque" type="text">
+                    <label for="qtdeEstoque">Estoque do produto</label>
+                </div>
+            </div>
+
             <div class="container center-align" id="menuBoletim12">
-
-                <a class="waves-effect waves-light btn-large oculto" onclick="testeEnvio()">Teste</a>
-
+                <a class="waves-effect waves-light btn-large center-align blue" onclick="Envio()">Cadastrar</a>
+                <a class="waves-effect waves-light btn center-align red" href="secao.html">Ir para Seções</a>
             </div>
-            </form>
-        </main>
-          <div id="listaProdutos"></div>
+        </form>
+
+        <div class="container">
+            <div class="row">
+                <div id="listaProdutos"></div>
+            </div>
+        </div>
+
         <script src="libs/jquery-3.4.1.min.js"></script>
         <script src="libs/jquery-ui.min.js"></script>
         <script src="libs/materialize.min.js"></script>
         <script src="libs/jquery.mask.js"></script>
         <script src="libs/app.js"></script>
-                  
+
         <script>
-        $(document).ready(function(){
-            $.get("http://localhost:8080/produtos", function(json, status){
-                var html='<div class="row">';
-                html+='<div class="col s6 l3">Nome</div>';
-                html+='<div class="col s6 l3">Descrição</div>';
-                html+='<div class="col s6 l2">Valor</div>';
-                html+='<div class="col s6 l2">Estoque</div>';
-                html+='<div class="col s6 l1"></div>';
-                html+='<div class="col s6 l1"></div>';
-                html+='</div>';
-                for(var i=0; i<json.length; i++){
-                    html+='<div class="row">';
-                    html+='<div class="col s6 l3">'+json[i].nome+'</div>';
-                    html+='<div class="col s6 l3">'+json[i].descricao+'</div>';
-                    html+='<div class="col s6 l2">'+json[i].valor+'</div>';
-                    html+='<div class="col s6 l2">'+json[i].qtdeEstoque+'</div>';
-                    html+='<div class="col s6 l1">'
-                    html+='<i class="Small material-icons clique blue-text text-darken-2" onclick="editarProduto(\''+json[i].id+'\')">edit</i>';
+            $(document).ready(function(){
+                $.get("http://localhost:8080/produtos", function(json, status){
+                    var html='<div class="row">';
+                    html+='<div class="col s6 l3">Nome</div>';
+                    html+='<div class="col s6 l3">Descrição</div>';
+                    html+='<div class="col s6 l2">Valor</div>';
+                    html+='<div class="col s6 l2">Estoque</div>';
+                    html+='<div class="col s6 l1"></div>';
+                    html+='<div class="col s6 l1"></div>';
                     html+='</div>';
-                    html+='<div class="col s6 l1">'
-                    html+='<i class="Small material-icons clique red-text text-darken-3" onclick="excluirProduto(\''+json[i].id+'\')">delete_forever</i>';
-                    html+='</div>';
-                    html+='</div>';
-                }
-                console.log(html);
-                $("#listaProdutos").html(html);
 
+                    for(var i=0; i<json.length; i++){
+                        html+='<div class="row">';
+                        html+='<div class="col s6 l3">'+json[i].nome+'</div>';
+                        html+='<div class="col s6 l3">'+json[i].descricao+'</div>';
+                        html+='<div class="col s6 l2">'+json[i].valor+'</div>';
+                        html+='<div class="col s6 l2">'+json[i].qtdeEstoque+'</div>';
+                        html+='<div class="col s6 l1">'
+                        html+='<i class="Small material-icons clique blue-text text-darken-2" onclick="editarProduto(\''+json[i].id+'\')">edit</i>';
+                        html+='</div>';
+                        html+='<div class="col s6 l1">'
+                        html+='<i class="Small material-icons clique red-text text-darken-3" onclick="excluirProduto(\''+json[i].id+'\')">delete_forever</i>';
+                        html+='</div>';
+                        html+='</div>';
+                    }
+                    console.log(html);
+                    $("#listaProdutos").html(html);
+                });
             });
 
-        });
-
-        function editarProduto(idProduto){
-            var url ="http://localhost:8080/produtos/"+idProduto
-            $.get(url, function(json, status){
-               $("#id").val(json.id);
-                $("#nome").val(json.nome);
-                $("#descricao").val(json.descricao);
-                $("#valor").val(json.valor);
-                $("#qtdeEstoque").val(json.qtdeEstoque);
-                $("#estoqueMinimo").val(json.estoqueMinimo);
-            });
-
-        }
-
-        
-             function testeEnvio() {
-                var url = "http://localhost:8080/produtos";
-                var dados = `{"nome":"Celular PAZIN",
-                "descricao":"Novo Pazin que não funciona",
-                "valor": 5000.00,
-                "qtdeEstoque":5,
-                "estoqueMinimo":2,
-                "imagem":"SEM IMAGEM"
-                }`;
-                var funcao = function (json) {
-                    console.log(json);
-                    exibirMensagem(json.id);
-                }
-
-
-                buscarDados(url, dados, funcao);
+            function editarProduto(idProduto) {
+                var url = "http://localhost:8080/produtos/" + idProduto;
+                $.get(url, function (json, status) {
+                    $("#id").val(json.id);
+                    $("#nome").val(json.nome);
+                    $("#descricao").val(json.descricao);
+                    $("#valor").val(json.valor);
+                    $("#qtdeEstoque").val(json.qtdeEstoque);
+                    $("#estoqueMinimo").val(json.estoqueMinimo);
+                });
             }
 
-        </script>  
-        
-        <div id="dialog" title="ATENÇÃO!" style="display: none">
+            function Envio(idProduto) {
+                var idProduto = $("#id").val();
+                var url = "http://localhost:8080/produtos";
+                var url = idProduto ? "http://localhost:8080/produtos/" + idProduto : "http://localhost:8080/produtos";
+                var dados = {
+                    "nome": $("#nome").val(),
+                    "descricao": $("#descricao").val(),
+                    "valor": parseFloat($("#valor").val()),
+                    "qtdeEstoque": parseInt($("#qtdeEstoque").val()),
+                    "estoqueMinimo": parseInt($("#estoqueMinimo").val()),
+                    "imagem": "SEM IMAGEM"
+                };
+                var metodoHTTP = idProduto ? "PUT" : "POST";
+
+                $.ajax({
+                    type: metodoHTTP,
+                    url: url,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(dados),
+                    success: function(json) {
+                        console.log(json);
+                        exibirMensagem("Produto salvo com sucesso!");
+                        carregarProdutos();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        exibirMensagem("Erro ao salvar o produto. Verifique o console para mais detalhes.");
+                    }
+                });
+            }
+
+            function excluirProduto(idProduto) {
+                var confirmarExclusao = confirm("Tem certeza que deseja excluir este produto?");
+                if (confirmarExclusao) {
+                    var url = "http://localhost:8080/produtos/" + idProduto;
+
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: function (json) {
+                            console.log(json);
+                            exibirMensagem("Produto excluído com sucesso!");
+                            carregarListaProdutos();
+                        },
+                        error: function (error) {
+                            console.error(error);
+                            exibirMensagem("Erro ao excluir o produto. Verifique o console para mais detalhes.");
+                        }
+                    });
+                }
+            }
+        </script>
+
+        <style>
+            /* Para tornar os botões de editar clicáveis. */
+            .clique {
+                cursor: pointer;
+            }
+        </style>
+
+        <div id="dialog" class="modal" title="ATENÇÃO!" style="display: none">
             <p class="center-align"><i class="material-icons medium amber-text">info</i><br/><span class="indigo-text center-align" id="msgResp"></span></p>
         </div>
-        
+
         <div id="dialogAguarde" class="modal oculto" title="AGUARDE...">
             <div class="modal-content">
                 <div class='preloader-wrapper small active'>

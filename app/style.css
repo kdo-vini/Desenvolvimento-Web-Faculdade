@@ -1,0 +1,47 @@
+.body {
+    background-color: #f4f4f4;
+    font-family: 'Ubuntu', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.header {
+    background-color: #3498db;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titulo-formulario {
+    color: #333;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+.input-field input[type=text] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.container.center-align {
+    margin-top: 20px;
+}
+
+.btn-large {
+    margin-right: 10px;
+}
+
+#listaProdutos {
+    margin-top: 20px;
+}
+
+/* Adicione mais estilos conforme necessário */
